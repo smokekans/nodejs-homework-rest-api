@@ -5,13 +5,13 @@ const { mapContactOutput } = require("./services");
 async function updateContact(req, res, next) {
   try {
     const { id } = req.params;
-    const { name, email, phone, favorire } = req.body;
+    const { name, email, phone, favorite } = req.body;
 
     const { error } = updateContactSchema.validate({
       name,
       email,
       phone,
-      favorire,
+      favorite,
     });
     if (error) {
       const err = new Error("Missing fields");
@@ -25,7 +25,7 @@ async function updateContact(req, res, next) {
         name,
         email,
         phone,
-        favorire,
+        favorite,
       },
       { new: true }
     ).catch((error) => {
