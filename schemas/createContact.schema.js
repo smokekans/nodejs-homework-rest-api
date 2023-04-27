@@ -6,7 +6,7 @@ const createContactSchema = Joi.object({
   name: Joi.string().pattern(new RegExp(regName)).required(),
   email: Joi.string().email(regEmail).required(),
   phone: Joi.string().pattern(regPhone).required(),
-  favorite: Joi.bool().required(),
+  favorite: Joi.bool().default(false),
 });
 
 module.exports = {

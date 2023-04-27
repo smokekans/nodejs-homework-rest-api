@@ -1,50 +1,40 @@
 const { updateContactSchema } = require("../../schemas");
 const { ContactModel } = require("../../database/models");
-const { mapContactOutput } = require("./services");
+const { mapContactOutput, createExcrptionHTTP } = require("../../services");
 
 async function updateContact(req, res, next) {
-  try {
-    const { id } = req.params;
-    const { name, email, phone, favorite } = req.body;
+  const { id } = req.params;
+  const { name, email, phone, favorite } = req.body;
 
-    const { error } = updateContactSchema.validate({
+  const { error } = updateContactSchema.validate({
+    name,
+    email,
+    phone,
+    favorite,
+  });
+  if (error) {
+    throw createExcrptionHTTP(400, "Missing fields");
+  }
+
+  const updateContact = await ContactModel.findByIdAndUpdate(
+    id,
+    {
       name,
       email,
       phone,
       favorite,
-    });
-    if (error) {
-      const err = new Error("Missing fields");
-      err.code = 400;
-      throw err;
-    }
+    },
+    { new: true }
+  ).catch((error) => {
+    throw createExcrptionHTTP(400, error.message);
+  });
 
-    const updateContact = await ContactModel.findByIdAndUpdate(
-      id,
-      {
-        name,
-        email,
-        phone,
-        favorite,
-      },
-      { new: true }
-    ).catch((error) => {
-      const err = Error(error.message);
-      err.code = 400;
-      throw err;
-    });
-
-    if (!updateContact) {
-      const err = new Error("This contact is not found");
-      err.code = 404;
-      throw err;
-    }
-
-    const mappedContact = mapContactOutput(updateContact);
-    res.status(200).json(mappedContact);
-  } catch (error) {
-    next(error);
+  if (!updateContact) {
+    throw createExcrptionHTTP(404, "This contact is not found");
   }
+
+  const mappedContact = mapContactOutput(updateContact);
+  res.status(200).json(mappedContact);
 }
 
 module.exports = {
