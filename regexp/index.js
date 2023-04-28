@@ -4,9 +4,11 @@ const regEmail = {
   tlds: { allow: ["com", "net"] },
 };
 const regPhone = /^\(\d{3}\) \d{3}-\d{4}$/;
+const regPassword = "^[a-zA-Z0-9]{8,50}$";
 
 module.exports = {
   regName,
   regEmail,
   regPhone,
+  regPassword,
 };

@@ -1,26 +1,18 @@
 const { ContactModel } = require("../../database/models");
-const { mapContactOutput } = require("./services");
+const { mapContactOutput, createExcrptionHTTP } = require("../../services");
 
 async function getContact(req, res, next) {
-  try {
-    const { id } = req.params;
-    const contacts = await ContactModel.findById(id).catch((error) => {
-      const err = Error(error.message);
-      err.code = 400;
-      throw err;
-    });
+  const { id } = req.params;
+  const contacts = await ContactModel.findById(id).catch((error) => {
+    throw createExcrptionHTTP(400, error.message);
+  });
 
-    if (!contacts) {
-      const error = new Error("This contact is not found");
-      error.code = 404;
-      throw error;
-    }
-
-    const mappedContact = mapContactOutput(contacts);
-    res.json(mappedContact);
-  } catch (error) {
-    next(error);
+  if (!contacts) {
+    throw createExcrptionHTTP(404, "This contact is not found");
   }
+
+  const mappedContact = mapContactOutput(contacts);
+  res.json(mappedContact);
 }
 
 module.exports = {
