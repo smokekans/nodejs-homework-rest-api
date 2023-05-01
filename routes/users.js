@@ -1,7 +1,7 @@
 const express = require("express");
 const authController = require("../controllers/auth");
 const { controllerWrapper } = require("../services");
-const { userAuthorizationMiddleware } = require("../middlewares");
+const { userAuthorizationMiddleware, upload } = require("../middlewares");
 
 const router = express.Router();
 
@@ -21,6 +21,13 @@ router.patch(
   "/:id",
   userAuthorizationMiddleware,
   controllerWrapper(authController.updateSubscriptionUser)
+);
+
+router.patch(
+  "/avatars",
+  userAuthorizationMiddleware,
+  upload.single("avatar"),
+  controllerWrapper(authController.updateAvatar)
 );
 
 module.exports = router;
