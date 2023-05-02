@@ -17,6 +17,11 @@ router.get(
   userAuthorizationMiddleware,
   controllerWrapper(authController.getCurrentUser)
 );
+router.get(
+  "/verify/:verificationToken",
+  controllerWrapper(authController.getVerificationToken)
+);
+router.post("/verify", controllerWrapper(authController.createVerify));
 router.patch(
   "/avatars",
   userAuthorizationMiddleware,

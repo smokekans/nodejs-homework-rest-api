@@ -18,11 +18,6 @@ app.use(express.static("public"));
 app.use("/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ message: err.message });
-});
-
 app.use(errorHandlingMiddleware);
 
 module.exports = app;
