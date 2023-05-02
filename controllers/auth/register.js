@@ -6,6 +6,7 @@ const {
   createHast,
   createJWT,
 } = require("../../services");
+const gravatar = require("gravatar");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -16,10 +17,12 @@ const register = async (req, res, next) => {
   }
 
   const passwordHash = await createHast(password);
+  const avatarURL = gravatar.url(email);
 
   const newUser = await UserModel.create({
     email,
     passwordHash,
+    avatarURL,
   }).catch((e) => {
     throw createExcrptionHTTP(409, "This email is already in use");
   });
@@ -32,7 +35,11 @@ const register = async (req, res, next) => {
 
   res.status(201).json({
     token: accessJWT,
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      avatarURL: avatarURL,
+    },
   });
 };
 

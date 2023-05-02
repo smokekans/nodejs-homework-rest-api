@@ -1,7 +1,7 @@
 const express = require("express");
 const authController = require("../controllers/auth");
 const { controllerWrapper } = require("../services");
-const { userAuthorizationMiddleware } = require("../middlewares");
+const { userAuthorizationMiddleware, upload } = require("../middlewares");
 
 const router = express.Router();
 
@@ -16,6 +16,12 @@ router.get(
   "/current",
   userAuthorizationMiddleware,
   controllerWrapper(authController.getCurrentUser)
+);
+router.patch(
+  "/avatars",
+  userAuthorizationMiddleware,
+  upload.single("avatar"),
+  controllerWrapper(authController.updateAvatar)
 );
 router.patch(
   "/:id",
