@@ -7,8 +7,8 @@ const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res, next) => {
   const { path: tempUpload, originalname } = req.file;
-  const user = req.user;
-  const fileName = `${user._id}_${originalname}`;
+  const { _id } = req.user;
+  const fileName = `${_id}_${originalname}`;
 
   const resultUpload = path.join(avatarsDir, fileName);
   Jimp.read(tempUpload, (error, avatar) => {
@@ -19,7 +19,7 @@ const updateAvatar = async (req, res, next) => {
   await fsp.rename(tempUpload, resultUpload);
 
   const avatarURL = path.join("avatars", fileName);
-  await UserModel.findByIdAndUpdate(user._id, { avatarURL });
+  await UserModel.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(201).json({ avatarURL });
 };
