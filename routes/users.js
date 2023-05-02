@@ -18,16 +18,15 @@ router.get(
   controllerWrapper(authController.getCurrentUser)
 );
 router.patch(
-  "/:id",
-  userAuthorizationMiddleware,
-  controllerWrapper(authController.updateSubscriptionUser)
-);
-
-router.patch(
   "/avatars",
   userAuthorizationMiddleware,
   upload.single("avatar"),
   controllerWrapper(authController.updateAvatar)
+);
+router.patch(
+  "/:id",
+  userAuthorizationMiddleware,
+  controllerWrapper(authController.updateSubscriptionUser)
 );
 
 module.exports = router;

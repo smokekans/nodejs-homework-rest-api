@@ -9,12 +9,10 @@ const updateAvatar = async (req, res, next) => {
   const { path: tempUpload, originalname } = req.file;
   const user = req.user;
   const fileName = `${user._id}_${originalname}`;
-  console.log(fileName);
 
   const resultUpload = path.join(avatarsDir, fileName);
   Jimp.read(tempUpload, (error, avatar) => {
     if (error) throw error;
-    console.log(error);
     avatar.resize(250, 250).write(tempUpload);
   });
 
