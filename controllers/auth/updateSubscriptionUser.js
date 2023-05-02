@@ -1,7 +1,5 @@
 const { UserModel } = require("../../database/models");
-const {
-  updateSubscriptionUserSchema,
-} = require("../../schemas/updateSubscriptionUser.schema");
+const { updateSubscriptionUserSchema } = require("../../schemas");
 const { createExcrptionHTTP, mapContactOutput } = require("../../services");
 
 const updateSubscriptionUser = async (req, res, next) => {

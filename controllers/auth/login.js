@@ -12,7 +12,7 @@ const login = async (req, res, next) => {
   }
 
   const user = await UserModel.findOne({ email });
-  if (!user) {
+  if (!user || !user.verify) {
     throw createExcrptionHTTP(404, "Email or password is wrong");
   }
 
